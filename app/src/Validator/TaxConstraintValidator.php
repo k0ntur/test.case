@@ -25,16 +25,9 @@ class TaxConstraintValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, TaxConstraint::class);
         }
 
-        if (null === $value || '' === $value) {
-            return;
-        }
-
         if (!is_string($value)) {
             throw new UnexpectedValueException($value, 'string');
         }
-
-        //$this->repository->findByTaxFormat();
-
 
         if ($this->repository->findOneByFormat($value) != null) {
             return;
