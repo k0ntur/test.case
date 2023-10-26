@@ -20,3 +20,12 @@ restapi-app контейнер где будет работать приложе
 ```
 docker exec -it restapi-app composer install
 ```
+
+### настройка базы данных
+
+```
+docker exec -it restapi-app php bin/console doctrine:migrations:execute --up 'DoctrineMigrations\Version20231026112202' 
+```
+
+Создаст таблицы соответствующие модели
+
