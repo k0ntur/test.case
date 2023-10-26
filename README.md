@@ -23,9 +23,22 @@ docker exec -it restapi-app composer install
 
 ### настройка базы данных
 
+в app необходимо создать копию файла .env и заменить строку подключения к базе на
+
+```
+DATABASE_URL="postgresql://postgres:pass@restapi-postgres:5432/restapi?serverVersion=16&charset=utf8"
+```
+
+теперь можно запустить миграцию для создания самой базы
+
 ```
 docker exec -it restapi-app php bin/console doctrine:migrations:execute --up 'DoctrineMigrations\Version20231026112202' 
 ```
 
 Создаст таблицы соответствующие модели
 
+### тестовые данные для базы
+
+```
+docker exec -it restapi-app php bin/console doctrine:fixtures:load
+```
