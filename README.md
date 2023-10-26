@@ -1,6 +1,6 @@
 # Установка docker
 
-### скомпилировать docker image 
+### скомпилировать docker image
 ```
 docker build --build-arg user=user1 -t symfony-pgsql-php:8.2 .
 ```
@@ -41,4 +41,17 @@ docker exec -it restapi-app php bin/console doctrine:migrations:execute --up 'Do
 
 ```
 docker exec -it restapi-app php bin/console doctrine:fixtures:load
+```
+
+### Пример запроса расчета цены
+
+```
+curl --request POST \
+  --url http://localhost/calculate-price \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "productId": 3,
+    "taxNumber": "GR777456789",
+    "couponCode": "promo6"
+}'
 ```
