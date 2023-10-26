@@ -55,3 +55,17 @@ curl --request POST \
     "couponCode": "promo6"
 }'
 ```
+
+### Пример запроса для выполнения покупки
+
+```
+curl --request POST \
+  --url http://localhost/purchase \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "productId": 3,
+    "taxNumber": "GR777456789",
+    "couponCode": "promo6",
+    "paymentProcessor": "paypal"
+}'
+```
