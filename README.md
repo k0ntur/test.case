@@ -5,7 +5,7 @@
 docker build --build-arg user=user1 -t symfony-pgsql-php:8.2 .
 ```
 
-### запустить docker composer
+### запустить docker compose для поднятия всей инфраструктуры
 ```
 docker compose -f docker-compose.yml up
 ```
@@ -15,7 +15,7 @@ docker compose -f docker-compose.yml up
 restapi-app контейнер где будет работать приложение. Он содержит все необходимые инструменты для работы с репозиторием, symfony, composer.
 
 
-### запустить composer чтобы установить зависимости
+### запустить composer чтобы установить все зависимости приложения и саму symfony
 
 ```
 docker exec -it restapi-app composer install
@@ -23,7 +23,7 @@ docker exec -it restapi-app composer install
 
 ### настройка базы данных
 
-в app необходимо создать копию файла .env и заменить строку подключения к базе на
+в директории app необходимо создать копию файла .env и заменить строку подключения к базе данные на следующую
 
 ```
 DATABASE_URL="postgresql://postgres:pass@restapi-postgres:5432/restapi?serverVersion=16&charset=utf8"
@@ -43,6 +43,10 @@ docker exec -it restapi-app php bin/console doctrine:migrations:execute --up 'Do
 docker exec -it restapi-app php bin/console doctrine:fixtures:load
 ```
 
+В базе появились данные: Продукты, Скидочные Купоны, Tax rates для стран
+
+> Небольшое замечание по поводу хранения цены. Все ценники хранятся в минимальных юнитах, в данном случае центы. При работе с сервисами оплаты система учитывает что разные сервисы могут работать с разными юнитами 
+
 ### Пример запроса расчета цены
 
 ```
@@ -54,6 +58,27 @@ curl --request POST \
     "taxNumber": "GR777456789",
     "couponCode": "promo6"
 }'
+```
+В ответ получим  статут и расчет суммы (в минимальных юнитах - центах)
+
+```
+{
+    "ok": true,
+    "sum": 1156
+}
+```
+в случае ошибки получаем ответ со статусом 400 и телом ответа
+
+```
+{
+    "errors": [
+        {
+            "property": "taxNumber",
+            "value": "GR777456",
+            "message": "Tax Number incorrect"
+        }
+    ]
+}
 ```
 
 ### Пример запроса для выполнения покупки
