@@ -24,7 +24,7 @@ docker exec -it restapi-app composer install
 
 ### настройка базы данных
 
-в директории app необходимо создать копию файла .env и заменить строку подключения к базе данные на следующую
+в директории app необходимо создать копию файла .env и заменить строку подключения к базе данные на следующую. Имя новогофайла .env.local
 
 ```
 DATABASE_URL="postgresql://postgres:pass@restapi-postgres:5432/restapi?serverVersion=16&charset=utf8"
