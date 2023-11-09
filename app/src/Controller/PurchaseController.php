@@ -32,9 +32,14 @@ class PurchaseController extends AbstractController
                 $request->couponCode
             );
         } catch(\Exception $e){
-            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+            return $this->json(
+                ['errors' => [$e->getMessage()]],
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
-        return new JsonResponse(['ok' => true]);
+        return $this->json(
+            ['ok' => true]
+        );
     }
 }

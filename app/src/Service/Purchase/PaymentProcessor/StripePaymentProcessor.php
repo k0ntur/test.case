@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Purchase\PaymentProcessor;
 
+use App\Service\Purchase\PaymentProcessorEnum;
 use Systemeio\TestForCandidates\PaymentProcessor\StripePaymentProcessor as StripeProcessor;
 
 class StripePaymentProcessor implements PaymentProcessorInterface
@@ -28,5 +29,10 @@ class StripePaymentProcessor implements PaymentProcessorInterface
     private function convert(int $sum):float
     {
         return $sum / 100;
+    }
+
+    public static function getServiceName(): string
+    {
+        return PaymentProcessorEnum::Stripe->value;
     }
 }

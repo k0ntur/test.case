@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\CountryTax;
 use App\Entity\Coupon;
 use App\Entity\Product;
+use App\Service\PriceCalculator\CouponTypeEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -40,16 +41,20 @@ class AppFixtures extends Fixture
         $coupon6 = new Coupon();
         $manager->persist($coupon6);
         $coupon6->setCode('promo6')
-            ->setDiscount(6);
+            ->setType(CouponTypeEnum::PERCENT)
+            ->setDiscount(6)
+        ;
 
         $coupon10 = new Coupon();
         $manager->persist($coupon10);
         $coupon10->setCode('promo10')
+            ->setType(CouponTypeEnum::PERCENT)
             ->setDiscount(10);
 
         $coupon15 = new Coupon();
         $manager->persist($coupon15);
         $coupon15->setCode('promo15')
+            ->setType(CouponTypeEnum::FIXED)
             ->setDiscount(15);
 
 

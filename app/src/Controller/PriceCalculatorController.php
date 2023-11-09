@@ -27,9 +27,14 @@ class PriceCalculatorController extends AbstractController
             $summ = $this->priceCalculator->calculate($request->productId, $request->taxNumber, $request->couponCode);
         } catch (\Exception $e)
         {
-            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+            return $this->json(
+                ['errors' => [$e->getMessage()]],
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
-        return new JsonResponse(['ok' => true, 'sum' => $summ]);
+        return $this->json(
+            ['ok' => true, 'sum' => $summ]
+        );
     }
 }

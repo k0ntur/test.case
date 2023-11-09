@@ -7,4 +7,5 @@ namespace App\Service\Purchase\PaymentProcessor;
 interface PaymentProcessorInterface
 {
     public function process(int $sum): bool;
+    public static function getServiceName(): string;
 }

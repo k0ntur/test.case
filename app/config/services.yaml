@@ -22,3 +22,11 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    _instanceof:
+        App\Service\Purchase\PaymentProcessor\PaymentProcessorInterface:
+            tags: [ 'app.payment_processor' ]
+
+    App\Service\Purchase\PurchaseService:
+        class: ~
+        arguments:
+            $locator: !tagged_locator { tag: 'app.payment_processor', index_by: 'key', default_index_method: 'getServiceName'}

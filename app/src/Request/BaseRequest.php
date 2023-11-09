@@ -10,6 +10,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BaseRequest
 {
+    private array $errors = [];
+
     public function __construct(
         protected ValidatorInterface $validator,
         protected RequestStack $requestStack,
@@ -35,11 +37,7 @@ class BaseRequest
                 try {
                     $reflectionProperty->setValue($this, $value);
                 } catch (\TypeError $e){
-                    $this->errorsHandler->handle([[
-                        'property' => $reflectionProperty->getName(),
-                        'value' => $value,
-                        'message' => 'Wrong parameter type'
-                    ]]);
+                    $this->errors[$reflectionProperty->getName()] = sprintf('Property `%s` = `%s` has wrong parameter type', $reflectionProperty->getName(), $value);
                 }
             }
         }
@@ -48,21 +46,15 @@ class BaseRequest
     protected function validate(): void
     {
         $violations = $this->validator->validate($this);
-        if (count($violations) < 1) {
+        if (count($violations) == 0) {
             return;
         }
 
-        $errors = [];
-
         /** @var \Symfony\Component\Validator\ConstraintViolation */
         foreach ($violations as $violation) {
-            $errors[] = [
-                'property' => $violation->getPropertyPath(),
-                'value' => $violation->getInvalidValue(),
-                'message' => $violation->getMessage(),
-            ];
+            $this->errors[$violation->getPropertyPath()] = $violation->getMessage();
         }
 
-        $this->errorsHandler->handle($errors);
+        $this->errorsHandler->handle($this->errors);
     }
 }

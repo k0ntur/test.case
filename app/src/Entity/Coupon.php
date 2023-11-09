@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Service\PriceCalculator\CouponTypeEnum;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CouponRepository;
 
@@ -21,6 +22,20 @@ class Coupon
 
     #[ORM\Column]
     private string $code;
+
+    #[ORM\Column(enumType: CouponTypeEnum::class)]
+    private CouponTypeEnum $type;
+
+    public function getType(): CouponTypeEnum
+    {
+        return $this->type;
+    }
+
+    public function setType(CouponTypeEnum $type): self
+    {
+        $this->type = $type;
+        return $this;
+    }
 
     public function getId(): int
     {

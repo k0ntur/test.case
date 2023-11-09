@@ -37,7 +37,13 @@ class PriceCalculatorServiceService implements PriceCalculatorServiceInterface
             if (null == $coupon) {
                 throw new NotFoundCouponException($couponCode);
             }
-            $price -= floor($price * $coupon->getDiscount() / 100);
+
+            $price = match($coupon->getType()){
+                CouponTypeEnum::PERCENT => $price - floor($price * $coupon->getDiscount() / 100),
+                CouponTypeEnum::FIXED => max(0, $price - $coupon->getDiscount()),
+                default => throw new \Exception('Not found Coupon Type')
+            };
+
         }
 
         $tax = $this->countryTaxRepository->findOneByFormat($taxNum);
